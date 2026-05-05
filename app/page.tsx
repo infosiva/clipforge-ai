@@ -1,210 +1,323 @@
+'use client'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Star, Shield, Zap, Users, CheckCircle, ChevronRight } from 'lucide-react'
 import config from '@/vertical.config'
-import { theme, btn } from '@/lib/theme'
-import HeroChatPreview from '@/components/HeroChatPreview'
+import { saveClip } from '@/lib/storage'
 
-const SOCIAL_PROOF = [
-  { name: 'Sarah M.', role: 'Used last week', text: `Found the perfect ${config.providerLabel.toLowerCase()} within 20 minutes. The AI understood exactly what I needed.`, rating: 5 },
-  { name: 'James T.', role: 'Regular user', text: `${config.name} has transformed how I find trusted professionals. No more scrolling through endless profiles.`, rating: 5 },
-  { name: 'Priya K.', role: 'Verified family', text: 'The background checks and reviews gave us real peace of mind. Would recommend to anyone.', rating: 5 },
+const ACCENT = '#f97316'   // orange-500
+const DARK = '#0a0a0f'
+const CARD = 'rgba(255,255,255,0.04)'
+const BORDER = 'rgba(255,255,255,0.08)'
+
+const EXAMPLE_PROMPTS = [
+  'A lone wolf running through a misty forest at dawn',
+  'Neon-lit Tokyo street at night, rain reflecting lights',
+  'Waves crashing against rocky cliffs at golden hour',
+  'Astronaut floating in space above Earth, cinematic',
+  'Coffee being poured in slow motion, warm bokeh',
 ]
 
-const HOW_IT_WORKS = [
-  { icon: '💬', step: '1', title: 'Chat with our AI', desc: `Tell our AI assistant what you need. No forms — just a natural conversation.` },
-  { icon: '✨', step: '2', title: 'Get matched', desc: `AI shortlists the best ${config.providerPlural.toLowerCase()} based on your specific requirements.` },
-  { icon: '📅', step: '3', title: 'Book instantly', desc: `Review profiles, check availability, and confirm — all in one place.` },
-]
+type Status = 'idle' | 'enhancing' | 'generating' | 'done' | 'error'
 
 export default function HomePage() {
-  const cats = config.categories.slice(0, 6)
+  const [prompt, setPrompt] = useState('')
+  const [duration, setDuration] = useState(config.defaultDuration)
+  const [aspectRatio, setAspectRatio] = useState(config.aspectRatios[0].value)
+  const [status, setStatus] = useState<Status>('idle')
+  const [videoUrl, setVideoUrl] = useState<string | null>(null)
+  const [enhancedPrompt, setEnhancedPrompt] = useState<string | null>(null)
+  const [provider, setProvider] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  const isLoading = status === 'enhancing' || status === 'generating'
+
+  async function handleGenerate() {
+    if (!prompt.trim() || isLoading) return
+    setStatus('enhancing')
+    setVideoUrl(null)
+    setEnhancedPrompt(null)
+    setError(null)
+
+    try {
+      setStatus('generating')
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: prompt.trim(), duration, aspectRatio }),
+      })
+      const data = await res.json() as {
+        videoUrl?: string
+        enhancedPrompt?: string
+        provider?: string
+        error?: string
+      }
+
+      if (!res.ok || data.error) {
+        setError(data.error ?? 'Generation failed')
+        setStatus('error')
+        return
+      }
+
+      setVideoUrl(data.videoUrl ?? null)
+      setEnhancedPrompt(data.enhancedPrompt ?? null)
+      setProvider(data.provider ?? null)
+      setStatus('done')
+
+      // Save to history
+      if (data.videoUrl) {
+        saveClip({
+          prompt: prompt.trim(),
+          enhancedPrompt: data.enhancedPrompt ?? prompt.trim(),
+          videoUrl: data.videoUrl,
+          provider: data.provider ?? 'unknown',
+          durationSeconds: duration,
+          aspectRatio,
+        })
+      }
+    } catch (e: any) {
+      setError((e as Error).message ?? 'Network error')
+      setStatus('error')
+    }
+  }
 
   return (
-    <div className="overflow-hidden">
+    <div style={{ minHeight: '100vh', background: DARK, color: '#fff', fontFamily: 'Inter, sans-serif' }}>
+      {/* Navbar */}
+      <nav style={{ borderBottom: `1px solid ${BORDER}`, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 50 }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ fontWeight: 900, fontSize: '1.2rem', letterSpacing: '-0.03em' }}>
+            Clip<span style={{ color: ACCENT }}>Forge</span> AI
+          </div>
+          <div style={{ display: 'flex', gap: 20, fontSize: '0.85rem' }}>
+            <Link href="/history" style={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'none' }}>My Clips</Link>
+            <Link href="/about" style={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'none' }}>How It Works</Link>
+          </div>
+        </div>
+      </nav>
 
-      {/* ── HERO ───────────────────────────────────────────── */}
-      <section className="relative px-6 pt-20 pb-28 max-w-6xl mx-auto">
-        {/* Decorative blob */}
-        <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full opacity-20 blur-3xl -z-10 bg-gradient-to-br ${theme.gradient}`} />
+      <main style={{ maxWidth: 760, margin: '0 auto', padding: '60px 24px 80px' }}>
+        {/* Hero */}
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: ACCENT, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
+            Free · No Signup · Open-Source AI
+          </div>
+          <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.04em', marginBottom: 16 }}>
+            Turn words into<br />
+            <span style={{ color: ACCENT }}>AI video clips</span>
+          </h1>
+          <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.5)', maxWidth: 480, margin: '0 auto' }}>
+            {config.tagline}
+          </p>
+        </div>
 
-        <div className="flex flex-col lg:flex-row items-center gap-16">
-          {/* Left: copy */}
-          <div className="flex-1 text-center lg:text-left fade-up">
-            {/* Trust badge */}
-            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full ${theme.badge} text-xs font-medium mb-6`}>
-              <Zap size={12} />
-              AI-Powered Matching — Free to Use
-            </div>
-
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
-              <span className="text-white">{config.tagline.split('—')[0]}</span>
-              {config.tagline.includes('—') && (
-                <><br /><span className={theme.gradientText}>— {config.tagline.split('—')[1].trim()}</span></>
-              )}
-            </h1>
-
-            <p className="text-white/55 text-lg mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Describe what you need in plain English. Our AI finds the best verified {config.providerPlural.toLowerCase()},
-              checks availability in real time, and helps you book in minutes — not days.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-              <Link href="/chat" className={btn.primary + ' text-base px-8 py-4'}>
-                Find my {config.providerLabel} <ArrowRight size={18} />
-              </Link>
-              <Link href="/providers" className={btn.secondary + ' text-base px-8 py-4'}>
-                I&apos;m a {config.providerLabel}
-              </Link>
-            </div>
-
-            {/* Trust row */}
-            <div className="flex flex-wrap items-center gap-5 mt-8 justify-center lg:justify-start text-sm text-white/45">
-              <span className="flex items-center gap-1.5"><CheckCircle size={14} className={theme.textAccent} />Background checked</span>
-              <span className="flex items-center gap-1.5"><CheckCircle size={14} className={theme.textAccent} />Real verified reviews</span>
-              <span className="flex items-center gap-1.5"><CheckCircle size={14} className={theme.textAccent} />No hidden fees</span>
+        {/* Generator Card */}
+        <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: '28px 24px', marginBottom: 32 }}>
+          {/* Prompt textarea */}
+          <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.6)', marginBottom: 8, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            Your idea
+          </label>
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Describe the video you want to create..."
+            rows={3}
+            disabled={isLoading}
+            style={{
+              width: '100%', boxSizing: 'border-box',
+              background: 'rgba(255,255,255,0.04)',
+              border: `1px solid ${prompt ? ACCENT + '60' : BORDER}`,
+              borderRadius: 10, padding: '12px 14px',
+              color: '#fff', fontSize: '0.97rem', lineHeight: 1.6,
+              resize: 'vertical', outline: 'none',
+              transition: 'border-color 0.2s',
+              fontFamily: 'inherit',
+            }}
+            maxLength={500}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6, marginBottom: 20 }}>
+            <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>{prompt.length}/500</div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+              {EXAMPLE_PROMPTS.slice(0, 2).map((ex) => (
+                <button
+                  key={ex}
+                  onClick={() => setPrompt(ex)}
+                  style={{
+                    background: 'rgba(249,115,22,0.12)', border: `1px solid ${ACCENT}40`,
+                    borderRadius: 999, padding: '3px 10px',
+                    color: ACCENT, fontSize: '0.72rem', cursor: 'pointer',
+                  }}
+                >
+                  {ex.slice(0, 28)}…
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Right: AI chat preview */}
-          <div className="w-full lg:w-[400px] flex-shrink-0">
-            <HeroChatPreview />
-          </div>
-        </div>
-      </section>
-
-      {/* ── STATS BAR ───────────────────────────────────────── */}
-      <section className="border-y border-white/[0.06] py-8 glass">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { n: '2,400+', l: `Verified ${config.providerPlural}` },
-            { n: '98%',    l: 'Satisfaction rate' },
-            { n: '< 5min', l: 'Avg match time' },
-            { n: '£0',     l: 'To browse & match' },
-          ].map(s => (
-            <div key={s.l}>
-              <div className={`text-2xl font-extrabold ${theme.gradientText}`}>{s.n}</div>
-              <div className="text-white/45 text-sm mt-1">{s.l}</div>
+          {/* Settings row */}
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 24 }}>
+            {/* Duration */}
+            <div style={{ flex: 1, minWidth: 140 }}>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.5)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Duration
+              </label>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {[3, 5, 8].filter(d => d <= config.maxDuration).map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => setDuration(d)}
+                    style={{
+                      flex: 1, padding: '8px 0', borderRadius: 8,
+                      border: `1px solid ${duration === d ? ACCENT : BORDER}`,
+                      background: duration === d ? ACCENT + '20' : 'transparent',
+                      color: duration === d ? ACCENT : 'rgba(255,255,255,0.5)',
+                      fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer',
+                    }}
+                  >
+                    {d}s
+                  </button>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* ── CATEGORIES ──────────────────────────────────────── */}
-      <section className="py-20 px-6 max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-3">What do you need help with?</h2>
-          <p className="text-white/45">Browse by category or let our AI guide you</p>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {cats.map(cat => (
-            <Link
-              key={cat.id}
-              href={`/search?category=${cat.id}`}
-              className={`${theme.card} ${theme.cardHover} ${theme.glowHover} p-5 flex flex-col gap-2 group`}
-            >
-              <span className="text-3xl">{cat.icon}</span>
-              <span className="font-semibold text-white group-hover:${theme.textAccentBold} transition-colors">{cat.label}</span>
-              <span className="text-white/45 text-xs leading-snug">{cat.desc}</span>
-            </Link>
-          ))}
-          <Link
-            href="/search"
-            className={`${theme.card} ${theme.cardHover} p-5 flex flex-col gap-2 items-center justify-center group`}
+            {/* Aspect ratio */}
+            <div style={{ flex: 2, minWidth: 200 }}>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.5)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Format
+              </label>
+              <select
+                value={aspectRatio}
+                onChange={(e) => setAspectRatio(e.target.value)}
+                style={{
+                  width: '100%', padding: '8px 12px', borderRadius: 8,
+                  border: `1px solid ${BORDER}`, background: 'rgba(255,255,255,0.05)',
+                  color: '#fff', fontSize: '0.88rem', cursor: 'pointer', outline: 'none',
+                }}
+              >
+                {config.aspectRatios.map((ar) => (
+                  <option key={ar.value} value={ar.value}>{ar.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Generate button */}
+          <button
+            onClick={handleGenerate}
+            disabled={!prompt.trim() || isLoading}
+            style={{
+              width: '100%', padding: '14px 0',
+              background: isLoading ? 'rgba(249,115,22,0.3)' : ACCENT,
+              border: 'none', borderRadius: 10,
+              color: '#fff', fontWeight: 800, fontSize: '1rem',
+              cursor: isLoading || !prompt.trim() ? 'not-allowed' : 'pointer',
+              transition: 'all 0.2s', letterSpacing: '-0.01em',
+            }}
           >
-            <ChevronRight size={28} className={`${theme.textAccent} group-hover:translate-x-1 transition-transform`} />
-            <span className="font-semibold text-white/60 text-sm">All categories</span>
-          </Link>
-        </div>
-      </section>
+            {status === 'enhancing' && '✨ Enhancing your prompt…'}
+            {status === 'generating' && '🎬 Generating video… (may take 60–120s)'}
+            {(status === 'idle' || status === 'done' || status === 'error') && '🎬 Generate Video'}
+          </button>
 
-      {/* ── HOW IT WORKS ────────────────────────────────────── */}
-      <section className="py-20 px-6 glass border-y border-white/[0.06]">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-3">How {config.name} works</h2>
-            <p className="text-white/45">From search to booked in under 5 minutes</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {HOW_IT_WORKS.map(step => (
-              <div key={step.step} className="text-center">
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center text-2xl mx-auto mb-4`}>
-                  {step.icon}
-                </div>
-                <div className={`text-xs font-bold ${theme.textAccent} mb-2 uppercase tracking-widest`}>Step {step.step}</div>
-                <h3 className="font-bold text-white text-lg mb-2">{step.title}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
-          </div>
+          <p style={{ textAlign: 'center', fontSize: '0.75rem', color: 'rgba(255,255,255,0.25)', marginTop: 12, marginBottom: 0 }}>
+            Free · powered by open-source AI models · no account needed
+          </p>
         </div>
-      </section>
 
-      {/* ── SOCIAL PROOF ────────────────────────────────────── */}
-      <section className="py-20 px-6 max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-3">Trusted by real families</h2>
-          <div className="flex items-center justify-center gap-1 text-amber-400">
-            {'★★★★★'} <span className="text-white/50 text-sm ml-2">4.9 average from 1,200+ reviews</span>
+        {/* Error */}
+        {status === 'error' && error && (
+          <div style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 12, padding: '16px 20px', marginBottom: 24, color: '#fca5a5' }}>
+            <strong>Error:</strong> {error}
           </div>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {SOCIAL_PROOF.map((r, i) => (
-            <div key={i} className={`${theme.card} p-6`}>
-              <div className="stars text-sm mb-3">{'★'.repeat(r.rating)}</div>
-              <p className="text-white/70 text-sm leading-relaxed mb-4">&ldquo;{r.text}&rdquo;</p>
-              <div>
-                <div className="font-semibold text-white text-sm">{r.name}</div>
-                <div className="text-white/40 text-xs">{r.role}</div>
-              </div>
+        )}
+
+        {/* Result */}
+        {status === 'done' && videoUrl && (
+          <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 24, marginBottom: 32 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <h2 style={{ fontWeight: 700, fontSize: '1rem', margin: 0 }}>Your Clip</h2>
+              <span style={{ fontSize: '0.72rem', color: ACCENT, fontWeight: 600, background: ACCENT + '15', padding: '3px 10px', borderRadius: 999 }}>
+                via {provider}
+              </span>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* ── TRUST FEATURES ──────────────────────────────────── */}
-      <section className="py-20 px-6 glass border-t border-white/[0.06]">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-3">Why {config.name}?</h2>
-            <p className="text-white/45">We built what {config.name.slice(0,4)} was missing</p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: <Shield size={22} />, title: 'Background checks', desc: 'Every provider is DBS/background checked before they can take bookings.' },
-              { icon: <Star size={22} />,   title: 'Portable reviews',  desc: `${config.providerPlural} own their reviews — they follow them everywhere, preventing gaming.` },
-              { icon: <Zap size={22} />,    title: 'AI matching',       desc: 'Describe your situation in plain English. No tick boxes, no wasted calls.' },
-              { icon: <Users size={22} />,  title: 'Same-provider continuity', desc: 'Families can re-book the same trusted provider effortlessly.' },
-              { icon: <CheckCircle size={22} />, title: 'Transparent pricing', desc: 'Full quote upfront. No surprise call-out fees or hidden extras.' },
-              { icon: <ArrowRight size={22} />, title: '5-min booking',  desc: 'Go from search to confirmed booking without leaving the app.' },
-            ].map(f => (
-              <div key={f.title} className={`${theme.card} p-5 flex gap-4 items-start`}>
-                <div className={`flex-shrink-0 w-10 h-10 rounded-xl ${theme.solidLight} flex items-center justify-center ${theme.textAccent}`}>
-                  {f.icon}
-                </div>
-                <div>
-                  <h4 className="font-semibold text-white mb-1">{f.title}</h4>
-                  <p className="text-white/50 text-sm leading-relaxed">{f.desc}</p>
-                </div>
+            <div style={{ borderRadius: 10, overflow: 'hidden', background: '#000', marginBottom: 16 }}>
+              <video
+                ref={videoRef}
+                src={videoUrl}
+                controls
+                autoPlay
+                loop
+                style={{ width: '100%', maxHeight: 400, display: 'block' }}
+              />
+            </div>
+
+            {enhancedPrompt && (
+              <div style={{ background: 'rgba(249,115,22,0.06)', border: `1px solid ${ACCENT}25`, borderRadius: 8, padding: '12px 14px', marginBottom: 16 }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: ACCENT, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>AI-Enhanced Prompt</div>
+                <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, margin: 0 }}>{enhancedPrompt}</p>
               </div>
+            )}
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              <a
+                href={videoUrl}
+                download="clipforge-clip.mp4"
+                style={{
+                  flex: 1, textAlign: 'center', padding: '10px 0',
+                  background: ACCENT, borderRadius: 8,
+                  color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: '0.88rem',
+                }}
+              >
+                ↓ Download
+              </a>
+              <button
+                onClick={() => { setStatus('idle'); setVideoUrl(null); setEnhancedPrompt(null) }}
+                style={{
+                  flex: 1, padding: '10px 0',
+                  background: 'transparent', border: `1px solid ${BORDER}`,
+                  borderRadius: 8, color: 'rgba(255,255,255,0.6)',
+                  cursor: 'pointer', fontWeight: 600, fontSize: '0.88rem',
+                }}
+              >
+                Generate Another
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Example prompts */}
+        <div>
+          <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
+            Try these prompts
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {EXAMPLE_PROMPTS.map((ex) => (
+              <button
+                key={ex}
+                onClick={() => setPrompt(ex)}
+                style={{
+                  textAlign: 'left', padding: '12px 16px',
+                  background: CARD, border: `1px solid ${BORDER}`,
+                  borderRadius: 10, color: 'rgba(255,255,255,0.65)',
+                  fontSize: '0.88rem', cursor: 'pointer', lineHeight: 1.5,
+                  transition: 'border-color 0.15s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.borderColor = ACCENT + '50')}
+                onMouseLeave={(e) => (e.currentTarget.style.borderColor = BORDER)}
+              >
+                <span style={{ color: ACCENT, marginRight: 8 }}>→</span>{ex}
+              </button>
             ))}
           </div>
         </div>
-      </section>
+      </main>
 
-      {/* ── FINAL CTA ───────────────────────────────────────── */}
-      <section className="py-24 px-6">
-        <div className={`max-w-3xl mx-auto text-center glass rounded-3xl p-12 border ${theme.border} relative overflow-hidden`}>
-          <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-5 rounded-3xl`} />
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 relative">
-            Ready to find your perfect {config.providerLabel.toLowerCase()}?
-          </h2>
-          <p className="text-white/50 mb-8 text-lg relative">Free to match. No card required. Takes 2 minutes.</p>
-          <Link href="/chat" className={btn.primary + ' text-base px-10 py-4 relative'}>
-            Get matched now <ArrowRight size={18} />
-          </Link>
-        </div>
-      </section>
-
+      <footer style={{ borderTop: `1px solid ${BORDER}`, padding: '24px', textAlign: 'center', fontSize: '0.78rem', color: 'rgba(255,255,255,0.2)' }}>
+        © {new Date().getFullYear()} ClipForge AI · Free AI video generation ·
+        <Link href="/history" style={{ color: 'rgba(255,255,255,0.3)', marginLeft: 8, textDecoration: 'none' }}>My Clips</Link>
+        <Link href="/about" style={{ color: 'rgba(255,255,255,0.3)', marginLeft: 8, textDecoration: 'none' }}>About</Link>
+      </footer>
     </div>
   )
 }

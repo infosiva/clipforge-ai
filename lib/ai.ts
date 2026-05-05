@@ -31,6 +31,8 @@
  */
 import config from '@/vertical.config'
 
+const _aiSystemPrompt = 'You are a helpful AI assistant.'
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 export type Quality = 'fast' | 'balanced' | 'best'
 type Msg = { role: 'user' | 'assistant'; content: string }
@@ -88,7 +90,7 @@ async function getEdgeConfig() {
     const items: Array<{ key: string; value: unknown }> = await res.json()
     const cfg: Record<string, unknown> = {}
     for (const { key, value } of items) cfg[key] = value
-    _edgeConfig = cfg as typeof _edgeConfig
+    _edgeConfig = cfg as unknown as typeof _edgeConfig
     console.log('[AI] Loaded model tiers from Edge Config')
   } catch {
     _edgeConfig = {}
@@ -248,7 +250,7 @@ export async function aiChat(
   maxTokens = 700,
   quality: Quality = 'balanced',
 ): Promise<string> {
-  const system = systemPrompt ?? config.aiSystemPrompt
+  const system = systemPrompt ?? (config as any).aiSystemPrompt ?? _aiSystemPrompt
   const { text } = await callAI(system, messages, maxTokens, quality)
   return text
 }
