@@ -109,3 +109,6 @@ body {
 }
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── Mobile: prevent horizontal overflow on all devices ── */
+html, body { overflow-x: hidden; max-width: 100%; }

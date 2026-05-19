@@ -1,4 +1,5 @@
 'use client'
+import { motion } from 'framer-motion'
 import { useState, useRef } from 'react'
 import Link from 'next/link'
 import config from '@/vertical.config'
@@ -83,6 +84,21 @@ export default function HomePage() {
 
   return (
     <div style={{ minHeight: '100vh', background: DARK, color: '#fff', fontFamily: 'Inter, sans-serif' }}>
+{/* Animated blob bg */}
+      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }} aria-hidden>
+        <motion.div
+          style={{ position: 'absolute', top: '-15%', left: '-8%', width: 600, height: 600, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(239,68,68,0.16) 0%, transparent 70%)', filter: 'blur(80px)' }}
+          animate={{ x: [0, 40, 0], y: [0, -20, 0], scale: [1, 1.08, 1] }}
+          transition={{ duration: 14, ease: 'easeInOut', repeat: Infinity }}
+        />
+        <motion.div
+          style={{ position: 'absolute', bottom: '-10%', right: '-6%', width: 500, height: 500, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(220,38,38,0.10) 0%, transparent 70%)', filter: 'blur(90px)' }}
+          animate={{ x: [0, -25, 0], y: [0, 20, 0], scale: [1, 1.06, 1] }}
+          transition={{ duration: 18, ease: 'easeInOut', repeat: Infinity, delay: 2 }}
+        />
+      </div>
       {/* Navbar */}
       <nav style={{ borderBottom: `1px solid ${BORDER}`, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 50 }}>
         <div style={{ maxWidth: 900, margin: '0 auto', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
