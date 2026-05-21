@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px; height: 630px; overflow: hidden;
+    background: #0a0a0f;
+    font-family: -apple-system, 'Inter', 'Helvetica Neue', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+
+  /* orange glow blobs */
+  .blob1 {
+    position: absolute; top: -100px; left: -80px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(249,115,22,0.22) 0%, transparent 70%);
+    filter: blur(80px);
+  }
+  .blob2 {
+    position: absolute; bottom: -120px; right: -60px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(249,115,22,0.14) 0%, transparent 70%);
+    filter: blur(90px);
+  }
+
+  /* waveform */
+  .waveform {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 120px; display: flex; align-items: flex-end;
+    gap: 4px; padding: 0 60px 24px;
+    opacity: 0.18;
+  }
+  .waveform span {
+    flex: 1; background: #f97316; border-radius: 3px 3px 0 0;
+    animation: none;
+  }
+
+  .center {
+    position: relative; z-index: 10;
+    text-align: center; display: flex; flex-direction: column;
+    align-items: center; gap: 20px;
+  }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(249,115,22,0.12); border: 1px solid rgba(249,115,22,0.3);
+    border-radius: 999px; padding: 6px 18px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #f97316;
+  }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #f97316; }
+
+  h1 {
+    font-size: 88px; font-weight: 900; letter-spacing: -0.04em;
+    line-height: 1; color: #fff;
+  }
+  h1 span { color: #f97316; }
+
+  .sub {
+    font-size: 28px; font-weight: 400; color: rgba(255,255,255,0.5);
+    letter-spacing: -0.01em;
+  }
+
+  .pills {
+    display: flex; gap: 12px; margin-top: 8px;
+  }
+  .pill {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 999px; padding: 7px 18px;
+    font-size: 15px; color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+</style>
+</head>
+<body>
+  <div class="blob1"></div>
+  <div class="blob2"></div>
+
+  <!-- waveform bars -->
+  <div class="waveform" id="wf"></div>
+
+  <div class="center">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      AI Podcast Clipper
+    </div>
+
+    <h1>Clip<span>Forge</span> AI</h1>
+    <p class="sub">Turn podcasts into viral short clips</p>
+
+    <div class="pills">
+      <span class="pill">MP3 / MP4 / WAV</span>
+      <span class="pill">TikTok · Shorts · Reels</span>
+      <span class="pill">2 free clips/month</span>
+    </div>
+  </div>
+
+  <script>
+    // generate waveform bars
+    const wf = document.getElementById('wf');
+    const heights = [20,35,55,80,95,70,45,30,60,90,110,95,75,50,38,60,85,100,88,65,42,55,78,95,80,60,40,30,50,72,90,85,65,45,35,58,80,100,90,70,50,38,55,75,95,85,62,45,32,58,80,95,88,70,50,40,30,52,78,92];
+    heights.forEach(h => {
+      const s = document.createElement('span');
+      s.style.height = h + 'px';
+      wf.appendChild(s);
+    });
+  </script>
+</body>
+</html>
