@@ -97,9 +97,12 @@ export default function HistoryPage() {
               />
 
               <div style={{ padding: '16px 20px' }}>
-                {/* Prompt */}
-                <p style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, margin: '0 0 10px' }}>
-                  {clip.prompt}
+                {/* Title + hook */}
+                <p style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', margin: '0 0 6px' }}>
+                  {clip.clipTitle}
+                </p>
+                <p style={{ fontSize: '0.85rem', color: 'rgba(249,115,22,0.85)', lineHeight: 1.5, fontStyle: 'italic', margin: '0 0 10px' }}>
+                  "{clip.hookLine}"
                 </p>
 
                 {/* Meta */}
@@ -112,6 +115,9 @@ export default function HistoryPage() {
                   </span>
                   <span style={{ fontSize: '0.72rem', color: ACCENT, background: ACCENT + '15', padding: '3px 8px', borderRadius: 999 }}>
                     {clip.provider}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: '#4ade80', background: 'rgba(74,222,128,0.1)', padding: '3px 8px', borderRadius: 999 }}>
+                    {clip.viralityScore} virality
                   </span>
                   <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.25)', marginLeft: 'auto' }}>
                     {new Date(clip.createdAt).toLocaleDateString()}

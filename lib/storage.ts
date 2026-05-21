@@ -1,22 +1,22 @@
 /**
- * lib/storage.ts — localStorage helpers for clip history
- * All clip history is stored client-side only (no DB needed for MVP)
+ * lib/storage.ts — localStorage clip history for podcast clipper
  */
 
 export interface ClipRecord {
   id: string
-  prompt: string          // original user prompt
-  enhancedPrompt: string  // AI-enhanced cinematic prompt
+  clipTitle: string
+  hookLine: string
   videoUrl: string
   provider: string
   durationSeconds: number
   aspectRatio: string
-  createdAt: string       // ISO timestamp
-  thumbnail?: string      // optional base64 thumbnail
+  viralityScore: number
+  transcriptText: string
+  createdAt: string
 }
 
-const KEY = 'clipforge_history'
-const MAX_RECORDS = 20   // keep last 20 clips
+const KEY = 'clipforge_podcast_history'
+const MAX_RECORDS = 20
 
 export function saveClip(clip: Omit<ClipRecord, 'id' | 'createdAt'>): ClipRecord {
   const record: ClipRecord = {
@@ -30,7 +30,6 @@ export function saveClip(clip: Omit<ClipRecord, 'id' | 'createdAt'>): ClipRecord
   try {
     localStorage.setItem(KEY, JSON.stringify(history))
   } catch {
-    // storage full — drop oldest
     history.pop()
     localStorage.setItem(KEY, JSON.stringify(history))
   }
