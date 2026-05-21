@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }
         })}} />
       </head>
-      <body className={inter.className} style={{ margin: 0, padding: 0, background: '#0a0a0f', color: '#fff' }}>
+      <body suppressHydrationWarning className={inter.className} style={{ margin: 0, padding: 0, background: '#0a0a0f', color: '#fff' }}>
         {children}
         <FloatingChatWrapper />
       </body>
