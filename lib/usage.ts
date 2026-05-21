@@ -1,5 +1,10 @@
-import { supabaseAdmin } from '@/lib/supabase'
+import { Redis } from '@upstash/redis'
 import config from '@/vertical.config'
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+})
 
 // Hash IP+UA to a stable anonymous key — no PII stored
 export function makeUserKey(ip: string, ua: string): string {
@@ -11,64 +16,36 @@ export function makeUserKey(ip: string, ua: string): string {
   return `anon_${Math.abs(hash).toString(36)}`
 }
 
-function currentMonth(): string {
+function usageKey(userKey: string): string {
   const d = new Date()
-  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`
+  const month = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`
+  return `clipforge:usage:${userKey}:${month}`
 }
 
 export async function checkUsage(userKey: string): Promise<{ allowed: boolean; remaining: number }> {
-  const month = currentMonth()
-
-  const { data, error } = await supabaseAdmin
-    .from('clip_usage')
-    .select('clip_count')
-    .eq('user_key', userKey)
-    .eq('month', month)
-    .maybeSingle()
-
-  if (error) {
-    // Fail open — don't block users if DB is down
-    console.error('[usage] checkUsage error:', error.message)
+  try {
+    const count = await redis.get<number>(usageKey(userKey))
+    const used = count ?? 0
+    const remaining = Math.max(0, config.freeClipsPerMonth - used)
+    return { allowed: remaining > 0, remaining }
+  } catch (e) {
+    // Fail open — don't block users if Redis is down
+    console.error('[usage] checkUsage error:', e)
     return { allowed: true, remaining: config.freeClipsPerMonth }
   }
-
-  const used = data?.clip_count ?? 0
-  const remaining = Math.max(0, config.freeClipsPerMonth - used)
-  return { allowed: remaining > 0, remaining }
 }
 
 export async function incrementUsage(userKey: string): Promise<number> {
-  const month = currentMonth()
-
-  const { data, error } = await supabaseAdmin.rpc('increment_clip_count', {
-    p_user_key: userKey,
-    p_month: month,
-  })
-
-  if (error) {
-    console.error('[usage] incrementUsage error:', error.message)
+  try {
+    const key = usageKey(userKey)
+    const newCount = await redis.incr(key)
+    // TTL: expire key 35 days after first write (covers full month + buffer)
+    if (newCount === 1) {
+      await redis.expire(key, 35 * 24 * 60 * 60)
+    }
+    return newCount
+  } catch (e) {
+    console.error('[usage] incrementUsage error:', e)
     return 0
-  }
-
-  return data as number
-}
-
-export interface ClipRecord {
-  user_key: string
-  clip_title: string
-  hook_line: string
-  transcript_text: string
-  video_url: string
-  provider: string
-  duration_seconds: number
-  aspect_ratio: string
-  virality_score: number
-}
-
-export async function saveClipToDb(record: ClipRecord): Promise<void> {
-  const { error } = await supabaseAdmin.from('clips').insert(record)
-  if (error) {
-    // Non-fatal — clip was generated, just not saved to history
-    console.error('[usage] saveClipToDb error:', error.message)
   }
 }

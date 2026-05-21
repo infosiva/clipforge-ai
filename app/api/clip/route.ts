@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generatePodcastClip } from '@/lib/clip'
-import { checkUsage, incrementUsage, saveClipToDb, makeUserKey } from '@/lib/usage'
+import { checkUsage, incrementUsage, makeUserKey } from '@/lib/usage'
 import type { ScoredSegment } from '@/lib/score'
 
 export const maxDuration = 180
@@ -48,21 +48,7 @@ export async function POST(req: NextRequest) {
       durationSeconds: body.durationSeconds,
     })
 
-    // Increment usage + save clip (both non-blocking on error)
-    await Promise.all([
-      incrementUsage(userKey),
-      saveClipToDb({
-        user_key: userKey,
-        clip_title: result.clipTitle,
-        hook_line: result.hookLine,
-        transcript_text: body.segment.text,
-        video_url: result.url,
-        provider: result.provider,
-        duration_seconds: result.durationSeconds,
-        aspect_ratio: result.aspectRatio,
-        virality_score: body.segment.viralityScore,
-      }),
-    ])
+    await incrementUsage(userKey)
 
     return NextResponse.json({
       ...result,
