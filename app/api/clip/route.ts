@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
 
     // Build anonymous user key from IP + UA
     const ip =
-      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
-      req.headers.get('x-real-ip') ??
+      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      req.headers.get('x-real-ip') ||
       'unknown'
     const ua = req.headers.get('user-agent') ?? ''
     const userKey = makeUserKey(ip, ua)
