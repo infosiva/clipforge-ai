@@ -27,6 +27,59 @@ interface ClipResult {
   remaining: number
 }
 
+const MOBILE_STEPS = [
+  { icon: '🎧', label: 'Upload', desc: 'MP3, MP4, WAV — drop it in', color: '#f97316' },
+  { icon: '📝', label: 'Transcribe', desc: 'Groq Whisper converts to text', color: '#a78bfa' },
+  { icon: '🎯', label: 'Score', desc: 'AI finds viral moments', color: '#4ade80' },
+  { icon: '✂️', label: 'Export', desc: 'Download 9:16 / 16:9 / 1:1', color: '#38bdf8' },
+]
+
+function MobileDemoStrip() {
+  const [active, setActive] = useState(0)
+
+  useEffect(() => {
+    const t = setInterval(() => setActive(a => (a + 1) % MOBILE_STEPS.length), 2200)
+    return () => clearInterval(t)
+  }, [])
+
+  return (
+    <div className="lg:hidden mb-6">
+      {/* Snap-scroll swipeable strip */}
+      <div
+        style={{
+          display: 'flex', gap: 10, overflowX: 'auto', scrollSnapType: 'x mandatory',
+          scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', paddingBottom: 4,
+        }}
+      >
+        {MOBILE_STEPS.map((s, i) => (
+          <div
+            key={i}
+            onClick={() => setActive(i)}
+            style={{
+              minWidth: 130, flexShrink: 0, scrollSnapAlign: 'start',
+              background: active === i ? `${s.color}12` : 'rgba(255,255,255,0.03)',
+              border: `1px solid ${active === i ? `${s.color}35` : 'rgba(255,255,255,0.07)'}`,
+              borderRadius: 14, padding: '14px 14px',
+              transition: 'all 250ms cubic-bezier(0.23,1,0.32,1)',
+              cursor: 'pointer',
+            }}
+          >
+            <div style={{ fontSize: '1.4rem', marginBottom: 6 }}>{s.icon}</div>
+            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: active === i ? s.color : '#fff', marginBottom: 3 }}>{s.label}</div>
+            <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', lineHeight: 1.4 }}>{s.desc}</div>
+          </div>
+        ))}
+      </div>
+      {/* Dot indicators */}
+      <div style={{ display: 'flex', gap: 5, justifyContent: 'center', marginTop: 8 }}>
+        {MOBILE_STEPS.map((_, i) => (
+          <div key={i} onClick={() => setActive(i)} style={{ width: active === i ? 16 : 5, height: 5, borderRadius: 999, background: active === i ? '#f97316' : 'rgba(255,255,255,0.15)', transition: 'all 250ms cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer' }} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // Animated demo panel — cycles through 3 states showing what the tool does
 const DEMO_SEGMENTS = [
   { title: 'The AI Revolution Moment', hook: '"This changes everything about how we work"', score: 94, time: '4:12 – 5:48' },
@@ -329,11 +382,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16 lg:items-center">
             {/* Left: hero + upload */}
             <div>
-              {/* Social proof pill */}
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/8 px-4 py-1.5">
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#f97316', display: 'inline-block', boxShadow: '0 0 6px #f97316' }} />
-                <span className="text-xs font-semibold text-orange-400">2,400+ clips generated this week</span>
-              </div>
+              <div className="mb-3 text-xs font-bold uppercase tracking-widest text-orange-500">AI Podcast Clipper</div>
 
               <h1 className="mb-4 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl">
                 Turn podcasts into<br />
@@ -343,8 +392,8 @@ export default function HomePage() {
                 Upload any MP3 or MP4. AI transcribes, scores viral moments, and generates ready-to-post clips for TikTok, Shorts, and Reels.
               </p>
 
-              {/* Steps */}
-              <div className="mb-8 flex items-center gap-2 text-xs text-white/30">
+              {/* Steps row */}
+              <div className="mb-6 flex items-center gap-2 text-xs text-white/30">
                 {['Upload', 'Transcribe', 'Score', 'Export'].map((s, i) => (
                   <span key={s} className="flex items-center gap-2">
                     <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/10 text-[10px] font-bold text-white/40">{i + 1}</span>
@@ -353,6 +402,9 @@ export default function HomePage() {
                   </span>
                 ))}
               </div>
+
+              {/* Mobile demo strip — shown only on mobile */}
+              <MobileDemoStrip />
 
               {/* Error banner */}
               {error && (
@@ -371,14 +423,14 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right: animated demo */}
+            {/* Right: animated demo — desktop only */}
             <div className="hidden lg:block">
               <div className="mb-3 flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-widest text-white/25">Live preview</span>
+                <span className="text-xs font-semibold uppercase tracking-widest text-white/25">How it works</span>
                 <div className="h-px flex-1 bg-white/[0.06]" />
               </div>
               <DemoPanel />
-              <p className="mt-3 text-center text-xs text-white/20">Watch the AI find viral moments in real-time</p>
+              <p className="mt-3 text-center text-xs text-white/20">AI finds your best moments automatically</p>
             </div>
           </div>
         )}
