@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import FloatingChatWrapper from '@/components/FloatingChatWrapper'
 
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning className={inter.className} style={{ margin: 0, padding: 0, background: '#0a0a0f', color: '#fff' }}>
         {children}
         <FloatingChatWrapper />
+        <Script defer data-site="clipforge.ai" src="http://31.97.56.148:3098/t.js" strategy="afterInteractive" />
       </body>
     </html>
   )
