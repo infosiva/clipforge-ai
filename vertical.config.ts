@@ -17,7 +17,7 @@ export interface ClipForgeConfig {
 const config: ClipForgeConfig = {
   id: 'clipforge',
   name: 'ClipForge AI',
-  tagline: 'Turn any podcast into viral short clips — automatically',
+  tagline: 'Turn any long video into platform-ready clips — in 60 seconds, no watermark.',
   domain: 'clipforge.ai',
   themeColor: 'orange',
   freeClipsPerMonth: 2,
