@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 export default function FloatingChatWrapper() {
   const [open, setOpen] = useState(false)
   const [msgs, setMsgs] = useState<{ role: 'user' | 'bot'; text: string }[]>([
-    { role: 'bot', text: "Hi! Need help creating video clips or content? 🎬" },
+    { role: 'bot', text: "Hi! Drop your podcast episode URL or describe your content — I'll find the clips worth turning into shorts." },
   ])
   const [input, setInput] = useState('')
 
@@ -26,7 +26,7 @@ export default function FloatingChatWrapper() {
 
   return (
     <>
-      <motion.button onClick={() => setOpen(o => !o)} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}
+      <motion.button onClick={() => setOpen(o => !o)} whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}
         style={{ position: 'fixed', bottom: 24, right: 24, width: 52, height: 52, borderRadius: '50%',
           background: 'linear-gradient(135deg,#ef4444,#dc2626)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center',
           justifyContent: 'center', boxShadow: '0 4px 20px rgba(239,68,68,0.35)', zIndex: 1000, fontSize: 20 }}>
@@ -53,7 +53,7 @@ export default function FloatingChatWrapper() {
             </div>
             <div style={{ padding: '10px 12px', borderTop: '1px solid rgba(239,68,68,0.35)', display: 'flex', gap: 8 }}>
               <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()}
-                placeholder="Ask about video clips or editing..."
+                placeholder='e.g. "Find best 60-sec clips from my podcast"…'
                 style={{ flex: 1, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(239,68,68,0.35)',
                   borderRadius: 8, padding: '6px 10px', fontSize: 12, color: '#f8fafc', outline: 'none' }} />
               <button onClick={send} style={{ background: 'linear-gradient(135deg,#ef4444,#dc2626)', border: 'none', borderRadius: 8, padding: '6px 12px', fontSize: 12, color: '#fff', cursor: 'pointer' }}>→</button>

@@ -7,13 +7,13 @@ import FloatingChatWrapper from '@/components/FloatingChatWrapper'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'ClipForge AI — AI Podcast Clip Generator',
-  description: 'Turn any podcast into viral short clips automatically. Upload MP3 or MP4, get AI-scored segments, export 9:16/16:9/1:1 for TikTok, YouTube Shorts & Reels.',
-  keywords: ['podcast clip generator', 'AI podcast clipper', 'viral podcast clips', 'podcast to short video', 'podcast highlight reel', 'auto clip podcast'],
+  title: 'ClipForge AI — Video Clip Generator | No Watermark, 60 Seconds',
+  description: 'AI video clip generator that finds viral moments from long videos. TikTok, Reels, Shorts, LinkedIn — no watermark on free plan.',
+  keywords: ['podcast clip generator', 'AI podcast clipper', 'viral podcast clips', 'podcast to short video', 'podcast highlight reel', 'auto clip podcast', 'no watermark video clipper', 'video clip generator'],
   metadataBase: new URL('https://clipforge.ai'),
   openGraph: {
-    title: 'ClipForge AI — AI Podcast Clip Generator',
-    description: 'Turn any podcast into viral short clips automatically. Upload MP3 or MP4, get AI-scored segments, export 9:16/16:9/1:1 for TikTok, YouTube Shorts & Reels.',
+    title: 'ClipForge AI — Video Clip Generator | No Watermark, 60 Seconds',
+    description: 'AI video clip generator that finds viral moments from long videos. TikTok, Reels, Shorts, LinkedIn — no watermark on free plan.',
     type: 'website',
     images: ['/og.png'],
   },

@@ -2,12 +2,15 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
 import config from '@/vertical.config'
 import { saveClip } from '@/lib/storage'
 import type { ScoredSegment } from '@/lib/score'
 import UploadZone from '@/components/UploadZone'
 import SegmentCard from '@/components/SegmentCard'
 import ClipPreview from '@/components/ClipPreview'
+import PlatformFilter from '@/components/PlatformFilter'
+import ClipStats from '@/components/ClipStats'
 
 type Stage =
   | 'upload'
@@ -263,6 +266,7 @@ function DemoPanel() {
 export default function HomePage() {
   const [stage, setStage] = useState<Stage>('upload')
   const [segments, setSegments] = useState<ScoredSegment[]>([])
+  const [filteredSegments, setFilteredSegments] = useState<ScoredSegment[]>([])
   const [aspectRatio, setAspectRatio] = useState<'9:16' | '16:9' | '1:1'>('9:16')
   const [generatingId, setGeneratingId] = useState<number | null>(null)
   const [clipResult, setClipResult] = useState<ClipResult | null>(null)
@@ -302,7 +306,9 @@ export default function HomePage() {
         setStage('upload')
         return
       }
-      setSegments(scoreData.segments ?? [])
+      const segs = scoreData.segments ?? []
+      setSegments(segs)
+      setFilteredSegments(segs)
       setStage('segments')
     } catch (e) {
       setError((e as Error).message ?? 'Network error')
@@ -382,14 +388,15 @@ export default function HomePage() {
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16 lg:items-center">
             {/* Left: hero + upload */}
             <div>
-              <div className="mb-3 text-xs font-bold uppercase tracking-widest text-orange-500">AI Podcast Clipper</div>
+              <div className="mb-3 text-xs font-bold uppercase tracking-widest text-orange-500">AI Video Clip Generator</div>
 
               <h1 className="mb-4 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl">
-                Turn podcasts into<br />
-                <span className="text-orange-500">viral short clips</span>
+                Turn any long video into<br />
+                <span className="text-orange-500">platform-ready clips</span><br />
+                <span className="text-white/70 text-3xl sm:text-4xl">— in 60 seconds, no watermark.</span>
               </h1>
               <p className="mb-6 max-w-md text-base text-white/50 leading-relaxed">
-                Upload any MP3 or MP4. AI transcribes, scores viral moments, and generates ready-to-post clips for TikTok, Shorts, and Reels.
+                AI finds your best moments, cuts them to platform-perfect length, and adds captions automatically.
               </p>
 
               {/* Steps row */}
@@ -416,11 +423,23 @@ export default function HomePage() {
 
               <UploadZone onFile={handleFile} />
 
-              <div className="mt-4 flex flex-wrap gap-4 text-xs text-white/25">
-                <span>✓ {config.freeClipsPerMonth} free clips/month</span>
-                <span>✓ MP3, MP4, M4A, WAV</span>
-                <span>✓ No signup required</span>
+              {/* Trust badge strip */}
+              <div className="mt-4 flex flex-wrap items-center gap-3 text-xs">
+                <span className="flex items-center gap-1.5 text-white/40">
+                  <span className="text-green-400 font-bold">✓</span> No watermark on free plan
+                </span>
+                <span className="text-white/15 select-none">·</span>
+                <span className="flex items-center gap-1.5 text-white/40">
+                  <span className="text-green-400 font-bold">✓</span> Auto-captions included
+                </span>
+                <span className="text-white/15 select-none">·</span>
+                <span className="flex items-center gap-1.5 text-white/40">
+                  <span className="text-green-400 font-bold">✓</span> Up to {config.freeClipsPerMonth} clips free
+                </span>
               </div>
+
+              {/* Processing stats */}
+              <ClipStats />
             </div>
 
             {/* Right: animated demo — desktop only */}
@@ -470,6 +489,12 @@ export default function HomePage() {
               </div>
               <button onClick={reset} className="rounded-lg px-3 py-1.5 text-xs text-white/40 transition hover:bg-white/10 hover:text-white">← New upload</button>
             </div>
+
+            {/* Platform filter tabs */}
+            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+              <PlatformFilter segments={segments} onFilter={setFilteredSegments} />
+            </div>
+
             <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
               <span className="text-xs font-semibold uppercase tracking-wide text-white/40">Format</span>
               <div className="flex gap-2">
@@ -484,9 +509,24 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            {segments.map((seg) => (
-              <SegmentCard key={seg.id} segment={seg} aspectRatio={aspectRatio} onGenerate={handleGenerate} generating={generatingId === seg.id} />
-            ))}
+
+            <AnimatePresence mode="popLayout">
+              {(filteredSegments.length > 0 ? filteredSegments : segments).map((seg, i) => (
+                <motion.div
+                  key={seg.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.22, delay: i * 0.07, ease: [0.23, 1, 0.32, 1] }}
+                >
+                  <SegmentCard segment={seg} aspectRatio={aspectRatio} onGenerate={handleGenerate} generating={generatingId === seg.id} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+
+            {filteredSegments.length === 0 && (
+              <p className="text-center text-sm text-white/30 py-6">No clips match this platform filter — showing all above</p>
+            )}
           </div>
         )}
 
