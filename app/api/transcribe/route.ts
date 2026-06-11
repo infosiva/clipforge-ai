@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { transcribeAudio } from '@/lib/transcribe'
 import config from '@/vertical.config'
+import { API_LIMITER } from '@/lib/rateLimit'
 
 export const maxDuration = 120
 
 export async function POST(req: NextRequest) {
+  const limited = API_LIMITER.check(req)
+  if (limited) return limited
+
   try {
     const form = await req.formData()
     const file = form.get('file') as File | null
@@ -34,7 +38,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(result)
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Unknown error'
-    console.error('[transcribe] Error:', msg)
+    console.error('[clipforge-ai][transcribe]', msg)
     return NextResponse.json({ error: msg.slice(0, 200) }, { status: 500 })
   }
 }

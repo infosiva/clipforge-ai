@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     })
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Unknown error'
-    console.error('[clip] Error:', msg)
+    console.error('[clipforge-ai][clip]', msg)
     const isProvider = msg.toLowerCase().includes('not configured') || msg.toLowerCase().includes('timed out')
     return NextResponse.json(
       { error: isProvider ? 'Video generation is not available.' : `Clip generation failed: ${msg.slice(0, 150)}` },
