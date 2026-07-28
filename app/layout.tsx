@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Script from 'next/script'
 import './globals.css'
 import FloatingChatWrapper from '@/components/FloatingChatWrapper'
 import FeedbackWidget from '@/components/FeedbackWidget'
@@ -44,7 +43,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <FloatingChatWrapper />
         <FeedbackWidget />
-        <Script defer data-site="clipforge.ai" src="http://31.97.56.148:3098/t.js" strategy="afterInteractive" />
       </body>
     </html>
   )

@@ -240,7 +240,7 @@ function VideoDemoPanel() {
           <div style={{ marginTop: 12, padding: '8px 10px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
             <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
               "…and that's when I realized the entire industry was{' '}
-              <span style={{ background: 'rgba(6,182,212,0.12)', color: '#0284c7', borderRadius: 3, padding: '1px 4px' }}>missing the point</span>
+              <span style={{ background: '#cffafe', color: '#155e75', borderRadius: 3, padding: '1px 4px', fontWeight: 600 }}>missing the point</span>
               {' '}about AI…"
             </span>
           </div>
