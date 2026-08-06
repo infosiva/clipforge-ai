@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { aiChat } from '@/lib/ai'
+import { AI_LIMITER } from '@/lib/rateLimit'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: NextRequest) {
+  const limited = AI_LIMITER.check(req)
+  if (limited) return limited
+
   try {
     const { messages } = await req.json()
     if (!messages || !Array.isArray(messages)) {

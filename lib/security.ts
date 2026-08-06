@@ -83,6 +83,7 @@ function getRecord(ip: string): IpRecord {
 
 // ── Admin Telegram alert ──────────────────────────────────────────────────────
 async function sendAlert(config: SecurityConfig, message: string): Promise<void> {
+  if (process.env.TELEGRAM_NOTIFICATIONS_DISABLED === 'true') return;
   if (!config.alertWebhook || !config.alertChatId) return;
   try {
     await fetch(config.alertWebhook, {
