@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import FloatingChatWrapper from '@/components/FloatingChatWrapper'
 import FeedbackWidget from '@/components/FeedbackWidget'
+import { getSiteFlags } from '@/lib/flags'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,7 +21,8 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const flags = await getSiteFlags('clipforge')
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -48,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body suppressHydrationWarning className={inter.className} style={{ margin: 0, padding: 0, background: '#f8fafc', color: '#0f172a' }}>
         {children}
-        <FloatingChatWrapper />
+        {flags.chatbot && <FloatingChatWrapper />}
         <FeedbackWidget />
       </body>
     </html>
