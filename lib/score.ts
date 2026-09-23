@@ -97,7 +97,7 @@ platform must be one of: "tiktok", "youtube-shorts", "reels", "all"`
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
+      model: 'qwen/qwen3.8-27b',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4,
       max_tokens: 800,
