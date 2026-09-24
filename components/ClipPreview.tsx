@@ -49,16 +49,20 @@ export default function ClipPreview({
       <div className="flex items-center gap-3">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-white/60 transition hover:bg-white/10 hover:text-white"
+          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm transition hover:bg-slate-100"
+          style={{ color: '#64748b' }}
         >
           ← Back to clips
         </button>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+      <div
+        className="flex flex-col gap-4 rounded-2xl border p-6"
+        style={{ background: '#ffffff', borderColor: '#e2e8f0', boxShadow: '0 1px 3px rgba(15,23,42,0.06)' }}
+      >
         <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-white">{clipTitle}</h2>
-          <span className="rounded-full border border-white/10 px-2.5 py-0.5 text-xs text-white/40">
+          <h2 className="font-semibold" style={{ color: '#0f172a' }}>{clipTitle}</h2>
+          <span className="rounded-full border px-2.5 py-0.5 text-xs" style={{ borderColor: '#e2e8f0', color: '#94a3b8' }}>
             via {provider}
           </span>
         </div>
@@ -72,8 +76,8 @@ export default function ClipPreview({
               className={[
                 'flex flex-col items-center rounded-xl border px-3 py-2 text-xs transition',
                 aspectRatio === ar.value
-                  ? 'border-orange-500/70 bg-orange-500/15 text-orange-300'
-                  : 'border-white/10 bg-white/[0.03] text-white/40 hover:border-white/20 hover:text-white/70',
+                  ? 'border-orange-500/70 bg-orange-500/15 text-orange-600'
+                  : 'border-slate-200 bg-slate-50 text-slate-500 hover:border-slate-300 hover:text-slate-700',
               ].join(' ')}
             >
               <span className="font-semibold">{ar.label}</span>
@@ -94,7 +98,7 @@ export default function ClipPreview({
 
         {/* Hook line */}
         <div className="rounded-xl border border-orange-500/20 bg-orange-500/5 p-3">
-          <p className="text-sm font-medium italic text-orange-300">"{hookLine}"</p>
+          <p className="text-sm font-medium italic text-orange-700">"{hookLine}"</p>
         </div>
 
         {/* Actions */}
@@ -108,7 +112,8 @@ export default function ClipPreview({
           </a>
           <button
             onClick={handleCopy}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm text-white/70 transition hover:border-white/40 hover:text-white"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm transition hover:border-slate-400"
+            style={{ borderColor: '#cbd5e1', color: '#475569' }}
           >
             {copied ? '✓ Copied!' : 'Copy Caption'}
           </button>

@@ -48,11 +48,12 @@ export default function UploadZone({ onFile, disabled }: UploadZoneProps) {
       onDragOver={(e) => { e.preventDefault(); if (!disabled) setDragging(true) }}
       onDragLeave={() => setDragging(false)}
       onDrop={onDrop}
+      style={{ background: dragging ? 'rgba(249,115,22,0.06)' : '#f8fafc' }}
       className={[
         'relative flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed p-12 transition-all duration-200',
         dragging
-          ? 'border-orange-400 bg-orange-500/10'
-          : 'border-white/20 bg-white/[0.03] hover:border-white/40 hover:bg-white/[0.05]',
+          ? 'border-orange-400'
+          : 'border-slate-300 hover:border-slate-400',
         disabled ? 'pointer-events-none opacity-50' : 'cursor-pointer',
       ].join(' ')}
     >
@@ -67,20 +68,20 @@ export default function UploadZone({ onFile, disabled }: UploadZoneProps) {
       {selectedFile ? (
         <div className="flex flex-col items-center gap-2 text-center">
           <div className="text-4xl">🎙️</div>
-          <p className="font-medium text-white">{selectedFile.name}</p>
-          <p className="text-sm text-white/50">{formatSize(selectedFile.size)}</p>
-          <p className="text-sm text-orange-400">Processing…</p>
+          <p className="font-medium" style={{ color: '#0f172a' }}>{selectedFile.name}</p>
+          <p className="text-sm" style={{ color: '#64748b' }}>{formatSize(selectedFile.size)}</p>
+          <p className="text-sm text-orange-500">Processing…</p>
         </div>
       ) : (
         <div className="flex flex-col items-center gap-3 text-center">
           <div className="text-5xl">🎧</div>
           <div>
-            <p className="text-lg font-semibold text-white">Drop your podcast here</p>
-            <p className="mt-1 text-sm text-white/50">
+            <p className="text-lg font-semibold" style={{ color: '#0f172a' }}>Drop your podcast here</p>
+            <p className="mt-1 text-sm" style={{ color: '#64748b' }}>
               MP3, MP4, M4A, WAV — up to 100 MB
             </p>
           </div>
-          <span className="rounded-full border border-orange-500/50 px-4 py-1.5 text-sm text-orange-400">
+          <span className="rounded-full border border-orange-400 px-4 py-1.5 text-sm text-orange-500">
             Browse files
           </span>
         </div>
