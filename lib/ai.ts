@@ -60,9 +60,9 @@ const DEFAULTS: Record<string, { tiers: Record<Quality, string[]>; baseUrl: stri
     baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
     keyEnv: 'GEMINI',
     tiers: {
-      fast:     ['gemini-2.0-flash-lite'],
-      balanced: ['gemini-2.0-flash', 'gemini-2.0-flash-lite'],
-      best:     ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash'],
+      fast:     ['gemini-2.5-flash-lite'],
+      balanced: ['gemini-2.5-flash-lite', 'gemini-2.5-flash-lite'],
+      best:     ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.5-flash-lite'],
     },
   },
   cerebras: {
