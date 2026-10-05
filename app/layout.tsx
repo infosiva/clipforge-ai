@@ -6,6 +6,7 @@ import FloatingChatWrapper from '@/components/FloatingChatWrapper'
 import FeedbackWidget from '@/components/FeedbackWidget'
 import { getSiteFlags } from '@/lib/flags'
 
+import { MotionProvider } from "@infosiva/shared-ui/modern";
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -49,7 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         })}} />
       </head>
       <body suppressHydrationWarning className={inter.className} style={{ margin: 0, padding: 0, background: '#f8fafc', color: '#0f172a' }}>
-        {children}
+        <MotionProvider>{children}</MotionProvider>
         {flags.chatbot && <FloatingChatWrapper />}
         <FeedbackWidget />
       </body>
