@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import config from '@/vertical.config'
 import { saveClip } from '@/lib/storage'
 import type { ScoredSegment } from '@/lib/score'
+import Logo from '@/components/Logo'
 import UploadZone from '@/components/UploadZone'
 import SegmentCard from '@/components/SegmentCard'
 import ClipPreview from '@/components/ClipPreview'
@@ -495,11 +496,7 @@ export default function HomePage() {
       {/* Sticky glass navbar */}
       <nav className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
-          <div className="flex items-center gap-2 text-lg font-black tracking-tight text-slate-900">
-            <img src="/logo.svg" alt="" width={28} height={28} />
-            <span>Clip<span style={{ color: '#0f5f73' }}>Forge</span></span>
-            <span className="text-slate-500 font-medium text-base">AI</span>
-          </div>
+          <Link href="/" className="text-lg"><Logo /></Link>
           <div className="flex items-center gap-5 text-sm text-slate-500">
             <Link href="/history" className="transition-colors duration-150 hover:text-slate-900">My Clips</Link>
             {remaining !== null && (
