@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { getHistory, deleteClip, clearHistory, type ClipRecord } from '@/lib/storage'
 
-const ACCENT = '#f97316'
+const ACCENT = '#0f5f73'
 const DARK = '#0a0a0f'
 const CARD = 'rgba(255,255,255,0.04)'
 const BORDER = 'rgba(255,255,255,0.08)'
@@ -101,7 +101,7 @@ export default function HistoryPage() {
                 <p style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fff', margin: '0 0 6px' }}>
                   {clip.clipTitle}
                 </p>
-                <p style={{ fontSize: '0.85rem', color: 'rgba(249,115,22,0.85)', lineHeight: 1.5, fontStyle: 'italic', margin: '0 0 10px' }}>
+                <p style={{ fontSize: '0.85rem', color: 'rgba(14,116,144,0.85)', lineHeight: 1.5, fontStyle: 'italic', margin: '0 0 10px' }}>
                   "{clip.hookLine}"
                 </p>
 

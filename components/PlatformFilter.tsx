@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import type { ScoredSegment } from '@/lib/score'
 
 const PLATFORMS = [
-  { id: 'all', label: 'All', lengthGuide: null, color: '#f97316' },
+  { id: 'all', label: 'All', lengthGuide: null, color: '#0f5f73' },
   { id: 'tiktok', label: 'TikTok', lengthGuide: '15–60s', color: '#ee1d52' },
   { id: 'reels', label: 'Reels', lengthGuide: '15–90s', color: '#c13584' },
   { id: 'youtube-shorts', label: 'YouTube Shorts', lengthGuide: 'under 60s', color: '#ff0000' },

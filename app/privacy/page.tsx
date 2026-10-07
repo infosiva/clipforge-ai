@@ -19,7 +19,7 @@ export default function PrivacyPage() {
       <Section title="Data Retention"><p>Video URLs and generated clip data are not retained after your session ends.</p></Section>
       <Section title="Your Rights"><p>Email privacy@clipforge.ai to request deletion of any data we hold about you.</p></Section>
       <Section title="Children&apos;s Privacy"><p>This service is not directed at children under 13. We do not knowingly collect data from minors.</p></Section>
-      <Section title="Contact"><p>Questions? Email <a href="mailto:privacy@clipforge.ai" style={{ color: '#7c3aed' }}>privacy@clipforge.ai</a></p></Section>
+      <Section title="Contact"><p>Questions? Email <a href="mailto:privacy@clipforge.ai" style={{ color: '#0f5f73' }}>privacy@clipforge.ai</a></p></Section>
     </main>
   )
 }

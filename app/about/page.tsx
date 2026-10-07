@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-const ACCENT = '#f97316'
+const ACCENT = '#0f5f73'
 const DARK = '#0a0a0f'
 const CARD = 'rgba(255,255,255,0.04)'
 const BORDER = 'rgba(255,255,255,0.08)'
@@ -40,7 +40,7 @@ export default function AboutPage() {
           ))}
         </div>
 
-        <div style={{ background: 'rgba(249,115,22,0.06)', border: `1px solid ${ACCENT}25`, borderRadius: 12, padding: '20px 22px', marginBottom: 48 }}>
+        <div style={{ background: 'rgba(14,116,144,0.06)', border: `1px solid ${ACCENT}25`, borderRadius: 12, padding: '20px 22px', marginBottom: 48 }}>
           <h2 style={{ fontWeight: 700, marginBottom: 12, fontSize: '1rem' }}>Models used</h2>
           <ul style={{ margin: 0, padding: '0 0 0 20px', fontSize: '0.88rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.9 }}>
             <li><strong style={{ color: '#fff' }}>Text AI</strong>: Llama 3.1 via Groq (free)</li>

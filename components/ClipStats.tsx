@@ -51,7 +51,7 @@ export default function ClipStats() {
       >
         <span
           className="rounded-full px-3 py-1 text-[11px]"
-          style={{ background: '#ede9fe', border: '1px solid #c4b5fd', color: '#5b21b6' }}
+          style={{ background: '#ecfeff', border: '1px solid #a5f3fc', color: '#155e75' }}
         >
           0 clips yet — try your first
         </span>

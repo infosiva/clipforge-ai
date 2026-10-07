@@ -5,6 +5,9 @@ import './globals.css'
 import FloatingChatWrapper from '@/components/FloatingChatWrapper'
 import FeedbackWidget from '@/components/FeedbackWidget'
 import { getSiteFlags } from '@/lib/flags'
+import { loadSiteTheme, buildThemeStyleTag, buildGa4Snippet } from '@/lib/theme-loader'
+import { AnimatedBg } from '@/components/AnimatedBg'
+import Telemetry from '@/components/Telemetry'
 
 import { MotionProvider } from "@infosiva/shared-ui/modern";
 const inter = Inter({ subsets: ['latin'] })
@@ -24,9 +27,13 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const flags = await getSiteFlags('clipforge')
+  const theme = await loadSiteTheme('clipforge')
+  const ga4 = buildGa4Snippet(theme)
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-layout={theme?.layout?.archetype ?? 'default'} suppressHydrationWarning>
       <head>
+        <style id="site-theme" dangerouslySetInnerHTML={{ __html: buildThemeStyleTag(theme) }} />
+        {ga4 && <><script async src={`https://www.googletagmanager.com/gtag/js?id=${theme?.analytics?.ga4Id}`} /><script dangerouslySetInnerHTML={{ __html: ga4 }} /></>}
         <meta name="google-adsense-account" content="ca-pub-4237294630161176" />
         <Script
                   async
@@ -49,10 +56,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           }
         })}} />
       </head>
-      <body suppressHydrationWarning className={inter.className} style={{ margin: 0, padding: 0, background: '#f8fafc', color: '#0f172a' }}>
+      <body suppressHydrationWarning className={inter.className} style={{ margin: 0, padding: 0, background: 'var(--background, #f8fafc)', color: 'var(--foreground, #0f172a)' }}>
+        <AnimatedBg theme={theme} fallback="none" />
         <MotionProvider>{children}</MotionProvider>
         {flags.chatbot && <FloatingChatWrapper />}
         <FeedbackWidget />
+        <Telemetry />
       </body>
     </html>
   )

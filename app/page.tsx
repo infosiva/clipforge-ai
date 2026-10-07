@@ -39,7 +39,7 @@ const CLIP_CARDS = [
     time: '4:12 – 5:48',
     format: '9:16',
     platform: 'TikTok',
-    platformColor: '#06b6d4',
+    platformColor: '#0f5f73',
     thumb: 'from-slate-800 to-slate-900',
   },
   {
@@ -65,10 +65,10 @@ const CLIP_CARDS = [
 ]
 
 const MOBILE_STEPS = [
-  { icon: '🎧', label: 'Upload', desc: 'MP3, MP4, WAV — drop it in', color: '#06b6d4' },
+  { icon: '🎧', label: 'Upload', desc: 'MP3, MP4, WAV — drop it in', color: '#0f5f73' },
   { icon: '📝', label: 'Transcribe', desc: 'Groq Whisper converts to text', color: '#0284c7' },
   { icon: '🎯', label: 'Score', desc: 'AI finds viral moments', color: '#059669' },
-  { icon: '✂️', label: 'Export', desc: 'Download 9:16 / 16:9 / 1:1', color: '#7c3aed' },
+  { icon: '✂️', label: 'Export', desc: 'Download 9:16 / 16:9 / 1:1', color: '#0f5f73' },
 ]
 
 function MobileDemoStrip() {
@@ -113,7 +113,7 @@ function MobileDemoStrip() {
             onClick={() => setActive(i)}
             style={{
               width: active === i ? 16 : 5, height: 5, borderRadius: 999,
-              background: active === i ? '#06b6d4' : '#cbd5e1',
+              background: active === i ? '#0f5f73' : '#cbd5e1',
               transition: 'width 250ms cubic-bezier(0.23,1,0.32,1), background 250ms cubic-bezier(0.23,1,0.32,1)',
               cursor: 'pointer',
             }}
@@ -177,7 +177,7 @@ function VideoDemoPanel() {
         border: '1px solid #e2e8f0',
         borderRadius: 20,
         overflow: 'hidden',
-        boxShadow: '0 8px 32px rgba(6,182,212,0.08), 0 2px 8px rgba(0,0,0,0.06)',
+        boxShadow: '0 8px 32px rgba(14,116,144,0.08), 0 2px 8px rgba(0,0,0,0.06)',
         position: 'relative',
       }}
     >
@@ -208,18 +208,18 @@ function VideoDemoPanel() {
         <div style={{ padding: '20px 18px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
             <div style={{
-              width: 8, height: 8, borderRadius: '50%', background: '#06b6d4',
-              boxShadow: '0 0 8px rgba(6,182,212,0.5)',
+              width: 8, height: 8, borderRadius: '50%', background: '#0f5f73',
+              boxShadow: '0 0 8px rgba(14,116,144,0.5)',
               animation: 'cfPulse 1.2s ease infinite',
             }} />
-            <span style={{ fontSize: '0.78rem', color: '#06b6d4', fontWeight: 600 }}>Scanning audio for viral moments…</span>
+            <span style={{ fontSize: '0.78rem', color: '#0f5f73', fontWeight: 600 }}>Scanning audio for viral moments…</span>
           </div>
           {/* Waveform */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 56, marginBottom: 12 }}>
             {[18,32,45,28,55,70,48,35,62,80,68,45,30,52,75,88,72,55,40,65,82,70,50,38,60,78,65,48,35,55,72,60,42,30,50,68].map((h, i) => (
               <div key={i} style={{
                 flex: 1, height: `${h}%`, borderRadius: 2,
-                background: (i / 36) * 100 <= waveProgress ? '#06b6d4' : '#e2e8f0',
+                background: (i / 36) * 100 <= waveProgress ? '#0f5f73' : '#e2e8f0',
                 transition: 'background 80ms ease',
               }} />
             ))}
@@ -227,14 +227,14 @@ function VideoDemoPanel() {
           {/* Progress bar */}
           <div style={{ height: 4, background: '#f1f5f9', borderRadius: 999, overflow: 'hidden' }}>
             <div style={{
-              height: '100%', background: 'linear-gradient(90deg, #06b6d4, #0284c7)',
+              height: '100%', background: 'linear-gradient(90deg, #0f5f73, #0284c7)',
               borderRadius: 999, width: `${waveProgress}%`,
               transition: 'width 60ms linear',
             }} />
           </div>
           <div style={{ marginTop: 8, fontSize: '0.7rem', color: '#94a3b8', display: 'flex', justifyContent: 'space-between' }}>
             <span>my-podcast-ep47.mp3</span>
-            <span style={{ color: '#06b6d4', fontWeight: 600 }}>{waveProgress}%</span>
+            <span style={{ color: '#0f5f73', fontWeight: 600 }}>{waveProgress}%</span>
           </div>
           {/* Scrolling transcript */}
           <div style={{ marginTop: 12, padding: '8px 10px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
@@ -252,7 +252,7 @@ function VideoDemoPanel() {
         <div style={{ padding: '16px 18px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
-              <span style={{ color: '#06b6d4', fontWeight: 700 }}>{CLIP_CARDS.length} viral moments</span> found
+              <span style={{ color: '#0f5f73', fontWeight: 700 }}>{CLIP_CARDS.length} viral moments</span> found
             </span>
             <span style={{ fontSize: '0.65rem', color: '#94a3b8' }}>Pick one to export</span>
           </div>
@@ -263,8 +263,8 @@ function VideoDemoPanel() {
                 key={i}
                 onClick={() => setActiveCard(i)}
                 style={{
-                  border: `1.5px solid ${i === activeCard ? 'rgba(6,182,212,0.45)' : '#e2e8f0'}`,
-                  background: i === activeCard ? 'rgba(6,182,212,0.04)' : '#fafafa',
+                  border: `1.5px solid ${i === activeCard ? 'rgba(14,116,144,0.45)' : '#e2e8f0'}`,
+                  background: i === activeCard ? 'rgba(14,116,144,0.04)' : '#fafafa',
                   borderRadius: 12,
                   padding: '10px 12px',
                   display: 'flex',
@@ -279,13 +279,13 @@ function VideoDemoPanel() {
                   width: 44, height: 44, borderRadius: 8, flexShrink: 0,
                   background: `linear-gradient(135deg, #0f172a, #1e293b)`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  border: `1px solid ${i === activeCard ? 'rgba(6,182,212,0.3)' : '#e2e8f0'}`,
+                  border: `1px solid ${i === activeCard ? 'rgba(14,116,144,0.3)' : '#e2e8f0'}`,
                   position: 'relative', overflow: 'hidden',
                 }}>
                   <div style={{
                     width: 0, height: 0,
                     borderTop: '6px solid transparent', borderBottom: '6px solid transparent',
-                    borderLeft: `10px solid ${i === activeCard ? '#06b6d4' : 'rgba(255,255,255,0.4)'}`,
+                    borderLeft: `10px solid ${i === activeCard ? '#0f5f73' : 'rgba(255,255,255,0.4)'}`,
                     marginLeft: 2,
                     transition: 'border-left-color 200ms ease',
                   }} />
@@ -329,9 +329,9 @@ function VideoDemoPanel() {
             }}>
               <div style={{
                 width: 38, height: 38, borderRadius: '50%',
-                background: 'rgba(6,182,212,0.95)',
+                background: 'rgba(14,116,144,0.95)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 0 20px rgba(6,182,212,0.45)',
+                boxShadow: '0 0 20px rgba(14,116,144,0.45)',
               }}>
                 <div style={{
                   width: 0, height: 0,
@@ -350,8 +350,8 @@ function VideoDemoPanel() {
             </div>
             <div style={{ padding: '8px 12px', display: 'flex', gap: 6, alignItems: 'center' }}>
               <span style={{
-                fontSize: '0.62rem', background: 'rgba(6,182,212,0.1)',
-                border: '1px solid rgba(6,182,212,0.25)', color: '#0284c7',
+                fontSize: '0.62rem', background: 'rgba(14,116,144,0.1)',
+                border: '1px solid rgba(14,116,144,0.25)', color: '#0284c7',
                 borderRadius: 999, padding: '2px 7px',
               }}>9:16</span>
               <span style={{
@@ -364,7 +364,7 @@ function VideoDemoPanel() {
           </div>
           <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
             <div style={{
-              flex: 1, background: '#06b6d4', borderRadius: 8, padding: '8px 0',
+              flex: 1, background: '#0f5f73', borderRadius: 8, padding: '8px 0',
               textAlign: 'center', fontSize: '0.72rem', fontWeight: 700, color: '#fff',
               cursor: 'pointer',
             }}>↓ Download MP4</div>
@@ -488,23 +488,24 @@ export default function HomePage() {
     >
       {/* Subtle cyan glow — light theme */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden>
-        <div className="absolute rounded-full" style={{ top: '-12%', right: '-5%', width: 560, height: 560, background: 'radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 70%)', filter: 'blur(90px)' }} />
+        <div className="absolute rounded-full" style={{ top: '-12%', right: '-5%', width: 560, height: 560, background: 'radial-gradient(circle, rgba(14,116,144,0.07) 0%, transparent 70%)', filter: 'blur(90px)' }} />
         <div className="absolute rounded-full" style={{ bottom: '-8%', left: '-4%', width: 440, height: 440, background: 'radial-gradient(circle, rgba(2,132,199,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
       </div>
 
       {/* Sticky glass navbar */}
       <nav className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
-          <div className="text-lg font-black tracking-tight text-slate-900">
-            Clip<span style={{ color: '#06b6d4' }}>Forge</span>
-            <span className="ml-1 text-slate-500 font-medium text-base">AI</span>
+          <div className="flex items-center gap-2 text-lg font-black tracking-tight text-slate-900">
+            <img src="/logo.svg" alt="" width={28} height={28} />
+            <span>Clip<span style={{ color: '#0f5f73' }}>Forge</span></span>
+            <span className="text-slate-500 font-medium text-base">AI</span>
           </div>
           <div className="flex items-center gap-5 text-sm text-slate-500">
             <Link href="/history" className="transition-colors duration-150 hover:text-slate-900">My Clips</Link>
             {remaining !== null && (
               <span
                 className="rounded-full px-3 py-0.5 text-xs font-semibold"
-                style={{ background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.25)', color: '#0284c7' }}
+                style={{ background: 'rgba(14,116,144,0.1)', border: '1px solid rgba(14,116,144,0.25)', color: '#0284c7' }}
               >
                 {remaining} free clip{remaining !== 1 ? 's' : ''} left
               </span>
@@ -521,14 +522,14 @@ export default function HomePage() {
             <div>
               <div
                 className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest"
-                style={{ background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.2)', color: '#0284c7' }}
+                style={{ background: 'rgba(14,116,144,0.1)', border: '1px solid rgba(14,116,144,0.2)', color: '#0284c7' }}
               >
                 AI Video Clipper
               </div>
 
               <h1 className="mb-4 text-4xl font-black leading-[1.08] tracking-tight sm:text-5xl text-slate-900">
                 Turn long videos into<br />
-                <span style={{ color: '#06b6d4' }}>viral short clips</span>
+                <span style={{ color: '#0f5f73' }}>viral short clips</span>
               </h1>
               <p className="mb-6 max-w-md text-base text-slate-500 leading-relaxed">
                 Upload any podcast or video. AI finds the best moments, cuts to platform-perfect length, and adds captions — in under 60 seconds.
@@ -540,7 +541,7 @@ export default function HomePage() {
                   <span key={s} className="flex items-center gap-2">
                     <span
                       className="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold"
-                      style={{ border: '1.5px solid rgba(6,182,212,0.4)', color: '#0284c7' }}
+                      style={{ border: '1.5px solid rgba(14,116,144,0.4)', color: '#0284c7' }}
                     >
                       {i + 1}
                     </span>
@@ -601,7 +602,7 @@ export default function HomePage() {
           >
             <div
               className="h-10 w-10 animate-spin rounded-full border-2"
-              style={{ borderColor: '#e2e8f0', borderTopColor: '#06b6d4' }}
+              style={{ borderColor: '#e2e8f0', borderTopColor: '#0f5f73' }}
             />
             <div className="text-center">
               <p className="font-semibold text-slate-900">
@@ -617,7 +618,7 @@ export default function HomePage() {
                   key={s}
                   className="h-1.5 w-16 rounded-full transition-colors"
                   style={{
-                    background: s === stage ? '#06b6d4' : stage === 'scoring' && s === 'transcribing' ? 'rgba(6,182,212,0.35)' : '#e2e8f0',
+                    background: s === stage ? '#0f5f73' : stage === 'scoring' && s === 'transcribing' ? 'rgba(14,116,144,0.35)' : '#e2e8f0',
                   }}
                 />
               ))}
@@ -666,7 +667,7 @@ export default function HomePage() {
                     onClick={() => handleAspectRatioChange(ar.value as '9:16' | '16:9' | '1:1')}
                     className="rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors"
                     style={aspectRatio === ar.value
-                      ? { borderColor: 'rgba(6,182,212,0.5)', background: 'rgba(6,182,212,0.06)', color: '#0284c7' }
+                      ? { borderColor: 'rgba(14,116,144,0.5)', background: 'rgba(14,116,144,0.06)', color: '#0284c7' }
                       : { borderColor: '#e2e8f0', color: '#94a3b8' }
                     }
                   >
@@ -704,7 +705,7 @@ export default function HomePage() {
           >
             <div
               className="h-10 w-10 animate-spin rounded-full border-2"
-              style={{ borderColor: '#e2e8f0', borderTopColor: '#06b6d4' }}
+              style={{ borderColor: '#e2e8f0', borderTopColor: '#0f5f73' }}
             />
             <div className="text-center">
               <p className="font-semibold text-slate-900">Generating your clip…</p>

@@ -48,7 +48,7 @@ export default function UploadZone({ onFile, disabled }: UploadZoneProps) {
       onDragOver={(e) => { e.preventDefault(); if (!disabled) setDragging(true) }}
       onDragLeave={() => setDragging(false)}
       onDrop={onDrop}
-      style={{ background: dragging ? 'rgba(249,115,22,0.06)' : '#f8fafc' }}
+      style={{ background: dragging ? 'rgba(14,116,144,0.06)' : '#f8fafc' }}
       className={[
         'relative flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed p-12 transition-all duration-200',
         dragging

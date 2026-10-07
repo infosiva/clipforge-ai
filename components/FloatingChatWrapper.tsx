@@ -40,9 +40,9 @@ export default function FloatingChatWrapper() {
         aria-label="Open ClipBot chat"
         style={{
           position: 'fixed', bottom: 24, right: 24, width: 52, height: 52,
-          borderRadius: '50%', background: 'linear-gradient(135deg,#f97316,#ea580c)',
+          borderRadius: '50%', background: 'linear-gradient(135deg,#0f5f73,#155e75)',
           border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center',
-          justifyContent: 'center', boxShadow: '0 4px 20px rgba(249,115,22,0.35)',
+          justifyContent: 'center', boxShadow: '0 4px 20px rgba(14,116,144,0.35)',
           zIndex: 1000, fontSize: 20,
           transition: 'transform 160ms cubic-bezier(0.23,1,0.32,1)',
         }}
@@ -59,9 +59,9 @@ export default function FloatingChatWrapper() {
             transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
             style={{
               position: 'fixed', bottom: 88, right: 24, width: 320, height: 420,
-              background: '#fff', border: '1px solid rgba(249,115,22,0.15)',
+              background: '#fff', border: '1px solid rgba(14,116,144,0.15)',
               borderRadius: 16, display: 'flex', flexDirection: 'column',
-              zIndex: 1000, overflow: 'hidden', boxShadow: '0 8px 40px rgba(249,115,22,0.12)',
+              zIndex: 1000, overflow: 'hidden', boxShadow: '0 8px 40px rgba(14,116,144,0.12)',
             }}
           >
             {/* Header */}
@@ -70,7 +70,7 @@ export default function FloatingChatWrapper() {
               fontSize: 13, fontWeight: 700, color: '#1a1a2e',
               display: 'flex', alignItems: 'center', gap: 8,
             }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#f97316', display: 'inline-block' }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#0f5f73', display: 'inline-block' }} />
               ClipBot
             </div>
 
@@ -84,7 +84,7 @@ export default function FloatingChatWrapper() {
                   key={i}
                   style={{
                     alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start',
-                    background: m.role === 'user' ? '#f97316' : '#fff7ed',
+                    background: m.role === 'user' ? '#0f5f73' : '#fff7ed',
                     color: m.role === 'user' ? '#fff' : '#1a1a2e',
                     padding: '8px 12px', borderRadius: 10,
                     fontSize: 12.5, maxWidth: '85%', lineHeight: 1.5,
@@ -111,7 +111,7 @@ export default function FloatingChatWrapper() {
                 onKeyDown={e => e.key === 'Enter' && send()}
                 placeholder="Ask about clipping, editing…"
                 style={{
-                  flex: 1, background: '#fff7ed', border: '1px solid rgba(249,115,22,0.2)',
+                  flex: 1, background: '#fff7ed', border: '1px solid rgba(14,116,144,0.2)',
                   borderRadius: 8, padding: '7px 10px', fontSize: 12, color: '#1a1a2e', outline: 'none',
                 }}
               />
@@ -119,7 +119,7 @@ export default function FloatingChatWrapper() {
                 onClick={send}
                 disabled={loading}
                 style={{
-                  background: '#f97316', border: 'none', borderRadius: 8,
+                  background: '#0f5f73', border: 'none', borderRadius: 8,
                   padding: '7px 13px', fontSize: 13, color: '#fff',
                   cursor: loading ? 'not-allowed' : 'pointer', fontWeight: 700,
                   opacity: loading ? 0.6 : 1,

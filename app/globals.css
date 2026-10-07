@@ -3,7 +3,7 @@
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
-  --theme-primary: #06b6d4;
+  --theme-primary: #0f5f73;
   --theme-base: #0f172a;
 }
 
@@ -44,7 +44,7 @@ body {
   100% { background-position:  200% center; }
 }
 .shimmer {
-  background: linear-gradient(90deg, transparent 0%, rgba(6,182,212,0.08) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(14,116,144,0.08) 50%, transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 2s linear infinite;
 }
@@ -65,15 +65,15 @@ body {
 
 /* ── Pulse glow — cyan ──────────────────────────────────── */
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(6,182,212,0.15); }
-  50%       { box-shadow: 0 0 40px rgba(6,182,212,0.35); }
+  0%, 100% { box-shadow: 0 0 20px rgba(14,116,144,0.15); }
+  50%       { box-shadow: 0 0 40px rgba(14,116,144,0.35); }
 }
 .pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
 
 /* ── Scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar       { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }
-::-webkit-scrollbar-thumb { background: rgba(6,182,212,0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(14,116,144,0.4); border-radius: 3px; }
 
 /* ── Custom input styles ────────────────────────────────── */
 .input-dark {
@@ -87,8 +87,8 @@ body {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .input-dark:focus {
-  border-color: rgba(6,182,212,0.5);
-  box-shadow: 0 0 0 3px rgba(6,182,212,0.12);
+  border-color: rgba(14,116,144,0.5);
+  box-shadow: 0 0 0 3px rgba(14,116,144,0.12);
 }
 .input-dark::placeholder { color: rgba(255,255,255,0.3); }
 
@@ -113,3 +113,11 @@ body {
 
 /* ── Mobile: prevent horizontal overflow on all devices ── */
 html, body { overflow-x: hidden; max-width: 100%; }
+
+/* hub runtime-switch aliases + archetype variants (data-layout from Edge Config theme layout.archetype) */
+:root { --bg: var(--background); --accent: var(--theme-primary); }
+[data-layout="editorial"] [class*="rounded"] { border-radius: 4px; }
+[data-layout="soft"] [class*="rounded"] { border-radius: 28px; }
+[data-layout="editorial"] h1, [data-layout="editorial"] h2 { letter-spacing: -0.03em; }
+[data-layout="centered"] main { text-align: center; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }

@@ -63,9 +63,9 @@ export default function FeedbackWidget() {
         title="Give feedback"
         style={{
           position: 'fixed', bottom: 24, left: 24, width: 44, height: 44,
-          borderRadius: 12, background: '#fff', border: '1.5px solid rgba(249,115,22,0.25)',
+          borderRadius: 12, background: '#fff', border: '1.5px solid rgba(14,116,144,0.25)',
           cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 2px 12px rgba(249,115,22,0.10)', zIndex: 1000, fontSize: 18,
+          boxShadow: '0 2px 12px rgba(14,116,144,0.10)', zIndex: 1000, fontSize: 18,
           transition: 'transform 160ms cubic-bezier(0.23,1,0.32,1)',
         }}
       >
@@ -81,9 +81,9 @@ export default function FeedbackWidget() {
             transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
             style={{
               position: 'fixed', bottom: 80, left: 24, width: 300,
-              background: '#fff', border: '1px solid rgba(249,115,22,0.15)',
+              background: '#fff', border: '1px solid rgba(14,116,144,0.15)',
               borderRadius: 16, zIndex: 1000, overflow: 'hidden',
-              boxShadow: '0 8px 40px rgba(249,115,22,0.12)',
+              boxShadow: '0 8px 40px rgba(14,116,144,0.12)',
             }}
           >
             {/* Header */}
@@ -92,7 +92,7 @@ export default function FeedbackWidget() {
               fontSize: 13, fontWeight: 700, color: '#1a1a2e',
               display: 'flex', alignItems: 'center', gap: 8,
             }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#f97316', display: 'inline-block' }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#0f5f73', display: 'inline-block' }} />
               Share feedback
             </div>
 
@@ -116,7 +116,7 @@ export default function FeedbackWidget() {
                         onMouseLeave={() => setHoverRating(0)}
                         style={{
                           fontSize: 22, background: 'none', border: 'none', cursor: 'pointer', padding: 2,
-                          color: n <= (hoverRating || rating) ? '#f97316' : '#e5e7eb',
+                          color: n <= (hoverRating || rating) ? '#0f5f73' : '#e5e7eb',
                           transition: 'color 100ms ease, transform 100ms ease',
                           transform: n <= (hoverRating || rating) ? 'scale(1.15)' : 'scale(1)',
                         }}
@@ -138,9 +138,9 @@ export default function FeedbackWidget() {
                         onClick={() => setType(t)}
                         style={{
                           padding: '4px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600, cursor: 'pointer',
-                          background: type === t ? 'rgba(249,115,22,0.1)' : '#f9fafb',
-                          border: `1px solid ${type === t ? 'rgba(249,115,22,0.4)' : '#e5e7eb'}`,
-                          color: type === t ? '#f97316' : '#6b7280',
+                          background: type === t ? 'rgba(14,116,144,0.1)' : '#f9fafb',
+                          border: `1px solid ${type === t ? 'rgba(14,116,144,0.4)' : '#e5e7eb'}`,
+                          color: type === t ? '#0f5f73' : '#6b7280',
                           transition: 'all 120ms ease',
                         }}
                       >
@@ -159,7 +159,7 @@ export default function FeedbackWidget() {
                     placeholder="What's on your mind?"
                     rows={3}
                     style={{
-                      width: '100%', background: '#fff7ed', border: '1px solid rgba(249,115,22,0.2)',
+                      width: '100%', background: '#fff7ed', border: '1px solid rgba(14,116,144,0.2)',
                       borderRadius: 8, padding: '8px 10px', fontSize: 12, color: '#1a1a2e',
                       outline: 'none', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit',
                     }}
@@ -191,7 +191,7 @@ export default function FeedbackWidget() {
                   onClick={submit}
                   disabled={loading}
                   style={{
-                    background: '#f97316', border: 'none', borderRadius: 8, padding: '9px 0',
+                    background: '#0f5f73', border: 'none', borderRadius: 8, padding: '9px 0',
                     fontSize: 13, fontWeight: 700, color: '#fff', cursor: loading ? 'not-allowed' : 'pointer',
                     opacity: loading ? 0.65 : 1, width: '100%',
                     transition: 'opacity 150ms ease, transform 100ms ease',
